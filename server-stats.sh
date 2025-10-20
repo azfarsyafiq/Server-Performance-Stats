@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Get the directory of the script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Create logs folder if it doesn't exist
+LOG_DIR="$SCRIPT_DIR/logs"
+mkdir -p "$LOG_DIR"
+
+# Correct variable and date format
+LOG_FILE="$LOG_DIR/system_report_$(date '+%Y-%m-%d_%H-%M-%S').log"
+
+
 #Total CPU usage
 get_cpu_usage(){
     echo "CPU usage:"
@@ -40,7 +51,7 @@ get_additional_stats(){
 }
 
 main(){
-
+    {
     echo "****************************"
     echo "Server Performance Stats"
     echo "****************************"
@@ -68,6 +79,8 @@ main(){
     get_additional_stats
     echo ""
     echo "****************************"
+    } | tee -a "$LOG_FILE"
 
-}
+    echo "Log written to: $LOG_FILE"
+} 
 main
